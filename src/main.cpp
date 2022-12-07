@@ -3,8 +3,8 @@
 #include "ArduinoJson.h"
 #include <WiFi.h>
 #include <aWOT.h>
-#include <UIPEthernet.h>  /*< Enc28J60 Modulu icin */
-#include <Ethernet.h>     /*< W5500 Modulu icin */
+#include <UIPEthernet.h>  /*< For Enc28J60 Module */
+#include <Ethernet.h>     /*< For W5500 Module */
 #include "MimeTypes.h"
 
 #define ETH_SPI_MOSI      GPIO_NUM_21
@@ -30,9 +30,9 @@ Application ETH_WebApp;
 
 
 /***********************************************
- * @brief Static fonksiyon tanımlamalari
+ * @brief Static function definitions
  ***********************************************/
-static void ResetEthModul(void);
+static void ResetEthModule(void);
 static void Ethernet_index_Cmd(Request &Request, Response &Response);
 static void WiFi_index_Cmd(Request &Request, Response &Response) ;
 static void MainJS_Cmd(Request &Request, Response &Response);
@@ -57,23 +57,23 @@ Serial.println("    ESP32 #02 Ethernet And WiFi Web Server    ");
 Serial.println("**********************************************\n\n");
 
 
-  SPI.begin(ETH_SPI_SCk, ETH_SPI_MISO, ETH_SPI_MOSI); /*< SPI Pin Atamalasi.  */
+  SPI.begin(ETH_SPI_SCk, ETH_SPI_MISO, ETH_SPI_MOSI); /*< SPI Pin initialization.  */
 
-  ResetEthModul();  /*< Reset Ethernet modulu */
+  ResetEthModule();  /*< Reset Ethernet module */
 
   uint8_t Eth_MAC[6];
-  esp_read_mac(Eth_MAC, ESP_MAC_ETH); /*< Set Ethernet MAC adresi.  */
+  esp_read_mac(Eth_MAC, ESP_MAC_ETH); /*< Set Ethernet MAC address.  */
 
-  Ethernet.init(ETH_SPI_CS);  /*< Init Ethernet modul */
+  Ethernet.init(ETH_SPI_CS);  /*< Initialize Ethernet module */
 
   Serial.println("ETHERNET Connection...");
-  Ethernet.begin(Eth_MAC);  /*< Start Ethernet modul. */
+  Ethernet.begin(Eth_MAC);  /*< Start Ethernet module. */
 
   if (Ethernet.hardwareStatus() == EthernetNoHardware) {
-    Serial.println("Ethernet modulu yok kardas...:(");
+    Serial.println("Ethernet module not found:(");
   }
   if (Ethernet.linkStatus() == LinkOFF) {
-    Serial.println("Ethernet modulune takili bir kablo yok.");
+    Serial.println("Ethernet cable is disconnected.");
   }
 
   Serial.println("WIFI Connection...");
@@ -126,10 +126,10 @@ void loop() {
 }
 
 /*
- * @brief Reset Ethernet Modul
+ * @brief Reset Ethernet Module
  * 
  */
-static void ResetEthModul(void)
+static void ResetEthModule(void)
 {
   pinMode(ETH_RST, OUTPUT);
 
@@ -143,7 +143,7 @@ static void ResetEthModul(void)
 
 
 /*
- * @brief Ethernet üzerinden gönderilen html
+ * @brief HTML sent over Ethernet
  * 
  * @param Request 
  * @param Response 
@@ -167,7 +167,7 @@ static void Ethernet_index_Cmd(Request &Request, Response &Response)
 }
 
 /*
- * @brief WiFi üzerinden gönderilen html
+ * @brief HTML sent over WiFi
  * 
  * @param Request 
  * @param Response 
@@ -192,7 +192,7 @@ static void WiFi_index_Cmd(Request &Request, Response &Response)
 
 
 /*
- * @brief main.js dosyasinin gönderir
+ * @brief Send the main.js file
  * 
  * @param Request 
  * @param Response 
@@ -216,7 +216,7 @@ static void MainJS_Cmd(Request &Request, Response &Response)
 }
 
 /*
- * @brief style.css dosyasini gönderir
+ * @brief Send the style.css file
  * 
  * @param Request 
  * @param Response 
@@ -240,7 +240,7 @@ static void StyleCSS_Cmd(Request &Request, Response &Response)
 }
 
 /*
- * @brief WiFi dan gelen GET Info  
+ * @brief Return WiFi and Ethernet information (via WiFi)
  * 
  * @param Request 
  * @param Response 
@@ -270,7 +270,7 @@ static void getInfo_WiFi_Cmd(Request &Request, Response &Response)
 }
 
 /*
- * @brief Ethernetten gelen GET Info 
+ * @brief Return WiFi and Ethernetn information (via Ethernet)
  * 
  * @param Request 
  * @param Response 
